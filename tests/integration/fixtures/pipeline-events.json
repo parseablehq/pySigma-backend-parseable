@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pipeline-otlp",
+    "process.executable.path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "process.command_line": "powershell.exe -EncodedCommand ZQBjAGgAbwA=",
+    "process.owner": "DOMAIN\\alice"
+  },
+  {
+    "case_id": "pipeline-ecs",
+    "winlog_channel": "Microsoft-Windows-Sysmon/Operational",
+    "event_code": 1,
+    "process_executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "process_command_line": "powershell.exe -EncodedCommand ZQBjAGgAbwA=",
+    "user_name": "DOMAIN\\alice"
+  },
+  {
+    "case_id": "pipeline-sysmon",
+    "Channel": "Microsoft-Windows-Sysmon/Operational",
+    "EventID": 1,
+    "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "CommandLine": "powershell.exe -EncodedCommand ZQBjAGgAbwA=",
+    "User": "DOMAIN\\alice"
+  }
+]

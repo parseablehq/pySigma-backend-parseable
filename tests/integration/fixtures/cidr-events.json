@@ -1,0 +1,12 @@
+[
+  {"case_id":"cidr-lower-bound","SourceIp":"192.168.0.0"},
+  {"case_id":"cidr-inside-one","SourceIp":"192.168.0.1"},
+  {"case_id":"cidr-inside-last-subnet","SourceIp":"192.168.255.254"},
+  {"case_id":"cidr-upper-bound","SourceIp":"192.168.255.255"},
+  {"case_id":"cidr-below","SourceIp":"192.167.255.255"},
+  {"case_id":"cidr-above","SourceIp":"192.169.0.0"},
+  {"case_id":"cidr-invalid-octet","SourceIp":"192.168.999.1"},
+  {"case_id":"cidr-invalid-text","SourceIp":"not-an-ip"},
+  {"case_id":"cidr-ipv6-inside","SourceIp":"2001:db8::1"},
+  {"case_id":"cidr-ipv6-outside","SourceIp":"2001:db9::1"}
+]

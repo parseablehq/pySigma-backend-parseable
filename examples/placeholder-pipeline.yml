@@ -1,0 +1,24 @@
+name: Parseable organization placeholder values
+priority: 20
+allowed_backends:
+  - parseable
+
+# Replace examples with values from your organization. Never use wildcard
+# replacement merely to force a placeholder rule to convert.
+vars:
+  Administrators:
+    - DOMAIN\\Administrator
+    - DOMAIN\\SecurityAdmin
+  Admins_Workstations:
+    - PAW-01
+    - PAW-02
+  internal_domains:
+    - corp.example.com
+    - internal.example.com
+  Legitimate_Countries:
+    - IN
+    - US
+
+transformations:
+  - id: resolve_organization_placeholders
+    type: value_placeholders

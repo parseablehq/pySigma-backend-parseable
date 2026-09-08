@@ -1,0 +1,11 @@
+title: Administrator Login Example
+status: test
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4624
+    TargetUserName|expand:
+      - '%Administrators%'
+  condition: selection
