@@ -1,0 +1,14 @@
+{
+  "corpus_commit": "5c9b21756f4e3ba137c1773ac9ba5a8332188961",
+  "files": 3783,
+  "minimum_success": 3758,
+  "maximum_statuses": {
+    "unsupported": 0,
+    "pipeline_required": 25
+  },
+  "allowed_statuses": [
+    "success",
+    "unsupported",
+    "pipeline_required"
+  ]
+}

@@ -1,0 +1,131 @@
+[
+  {
+    "case_id": "powershell-positive",
+    "Image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "CommandLine": "powershell.exe -EncodedCommand AAAA",
+    "EventID": 1,
+    "User": "DOMAIN\\alice",
+    "service.name": "Checkout",
+    "message": "credential dumping detected",
+    "score": 10,
+    "enabled": true
+  },
+  {
+    "case_id": "powershell-near-miss",
+    "Image": "C:\\Windows\\System32\\cmd.exe",
+    "CommandLine": "cmd.exe /c echo harmless",
+    "EventID": 1,
+    "User": "SYSTEM",
+    "service.name": "checkout",
+    "message": "normal operation",
+    "score": 2,
+    "enabled": false
+  },
+  {
+    "case_id": "case-uppercase",
+    "Image": "POWERSHELL.EXE",
+    "CommandLine": "POWERSHELL -ENCODEDCOMMAND BBBB",
+    "EventID": 2,
+    "User": "ADMIN",
+    "service.name": "CHECKOUT",
+    "message": "UPPERCASE SAMPLE",
+    "score": 20,
+    "enabled": true
+  },
+  {
+    "case_id": "apostrophe",
+    "Image": "tool.exe",
+    "CommandLine": "echo O'Brien",
+    "EventID": 3,
+    "User": "O'Brien",
+    "service.name": "identity",
+    "message": "user O'Brien authenticated",
+    "score": 3,
+    "enabled": true
+  },
+  {
+    "case_id": "literal-wildcards",
+    "Image": "wildcard.exe",
+    "CommandLine": "literal * and ? plus 100% under_score",
+    "EventID": 4,
+    "User": "tester",
+    "service.name": "wildcards",
+    "message": "value%part value_part value*part value?part",
+    "score": 4,
+    "enabled": true
+  },
+  {
+    "case_id": "explicit-null",
+    "Image": null,
+    "CommandLine": null,
+    "EventID": 5,
+    "User": null,
+    "service.name": "null-test",
+    "message": "explicit null fields",
+    "score": 5,
+    "enabled": false
+  },
+  {
+    "case_id": "missing-optional-fields",
+    "EventID": 6,
+    "service.name": "missing-test",
+    "message": "optional fields omitted",
+    "score": 6,
+    "enabled": false
+  },
+  {
+    "case_id": "unicode",
+    "Image": "unicode.exe",
+    "CommandLine": "echo Straße İstanbul 東京",
+    "EventID": 7,
+    "User": "Straße",
+    "service.name": "İstanbul",
+    "message": "Unicode Straße İstanbul 東京",
+    "score": 7,
+    "enabled": true
+  },
+  {
+    "case_id": "regex-positive",
+    "Image": "runner.exe",
+    "CommandLine": "foo-123-BAR",
+    "EventID": 8,
+    "User": "regex-user",
+    "service.name": "regex",
+    "message": "regex positive",
+    "score": 8,
+    "enabled": true
+  },
+  {
+    "case_id": "regex-near-miss",
+    "Image": "runner.exe",
+    "CommandLine": "foo-no-number-BAR",
+    "EventID": 9,
+    "User": "regex-user",
+    "service.name": "regex",
+    "message": "regex near miss",
+    "score": 9,
+    "enabled": true
+  },
+  {
+    "case_id": "windows-temp-positive",
+    "Image": "C:\\Windows\\Temp\\payload.exe",
+    "CommandLine": "C:\\Windows\\Temp\\payload.exe --run",
+    "EventID": 10,
+    "User": "DOMAIN\\bob",
+    "service.name": "endpoint",
+    "message": "Windows path fixture",
+    "score": 100,
+    "enabled": true
+  },
+  {
+    "case_id": "numeric-boundary",
+    "Image": "score.exe",
+    "CommandLine": "score boundary",
+    "EventID": 11,
+    "User": "scorer",
+    "service.name": "numeric",
+    "message": "numeric boundary",
+    "score": 5,
+    "enabled": true
+  }
+]

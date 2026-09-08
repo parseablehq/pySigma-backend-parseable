@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install test dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -e '.[test]' sigma-cli build
+      - name: Lint
+        run: ruff check .
+      - name: Unit tests
+        run: pytest tests -m 'not integration' --cov=sigma.backends.parseable --cov=sigma.pipelines.parseable --cov-report=term-missing
+      - name: Sigma CLI discovery and conversion
+        run: |
+          sigma list targets
+          sigma list pipelines parseable
+          sigma convert -t parseable -O dataset=windows-events examples/powershell.yml > /tmp/parseable-query.sql
+          sigma convert -t parseable -p parseable_otlp -O dataset=otel-events examples/powershell.yml > /tmp/parseable-otlp-query.sql
+          sigma convert -t parseable -p parseable_sysmon -p parseable_ecs -O dataset=ecs-events examples/powershell.yml > /tmp/parseable-ecs-query.sql
+          test -s /tmp/parseable-query.sql
+          test -s /tmp/parseable-otlp-query.sql
+          test -s /tmp/parseable-ecs-query.sql
+      - name: Build distributions
+        if: matrix.python-version == '3.14'
+        run: python -m build
+
+  corpus-regression:
+    name: Sigma corpus regression
+    runs-on: ubuntu-latest
+    env:
+      SIGMA_CORPUS_COMMIT: 5c9b21756f4e3ba137c1773ac9ba5a8332188961
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install backend
+        run: python -m pip install --upgrade pip && python -m pip install -e '.[test]'
+      - name: Fetch pinned Sigma corpus
+        run: |
+          git init "$RUNNER_TEMP/sigma-corpus"
+          git -C "$RUNNER_TEMP/sigma-corpus" remote add origin https://github.com/SigmaHQ/sigma.git
+          git -C "$RUNNER_TEMP/sigma-corpus" fetch --depth 1 origin "$SIGMA_CORPUS_COMMIT"
+          git -C "$RUNNER_TEMP/sigma-corpus" checkout --detach FETCH_HEAD
+      - name: Run compatibility regression gate
+        run: |
+          python scripts/corpus_sweep.py "$RUNNER_TEMP/sigma-corpus" \
+            --baseline reports/corpus-baseline.json \
+            --output-dir "$RUNNER_TEMP/corpus-report"
+      - name: Upload full corpus report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: corpus-report
+          path: ${{ runner.temp }}/corpus-report/
+          if-no-files-found: error
